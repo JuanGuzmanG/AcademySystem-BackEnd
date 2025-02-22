@@ -1,4 +1,4 @@
-package jjgg.academysystem.models;
+package jjgg.academysystem.entities;
 
 import jakarta.persistence.*;
 
