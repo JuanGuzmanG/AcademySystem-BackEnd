@@ -2,7 +2,7 @@ package jjgg.academysystem.entities;
 
 import jakarta.persistence.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,17 +18,14 @@ public class User {
     private String middleName;
     private String lastName;
     private String secondLastName;
-    private Date birthDate;
+    private LocalDate birthDate;
     private String email;
-    private String phoneNumber;
-
-    private Long typeDocument;
-    private Long CountryBirth;
-    private Long gender;
-    private Long bloodType;
-    private Long rol;
-
+    private String CountryBirth;
+    private Long phoneNumber;
+    private String gender;
+    private String bloodType;
     private String photo;
+    private String documentType;
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "user")
     private Set<userRol> userrol = new HashSet<>();
@@ -36,7 +33,10 @@ public class User {
     public User() {
     }
 
-    public User(Long document, String password, String firstName, String middleName, String lastName, String secondLastName, Date birthDate, String email, String phoneNumber, Long typeDocument, Long countryBirth, Long gender, Long bloodType, Long rol, String photo, Set<userRol> userrol) {
+    public User(Long document, String password, String firstName, String middleName, String lastName,
+                String secondLastName, LocalDate birthDate, String email, Long phoneNumber,
+                String documentType, String countryBirth, String gender, String bloodType,
+                String photo, Set<userRol> userrol) {
         this.document = document;
         this.password = password;
         this.firstName = firstName;
@@ -46,11 +46,10 @@ public class User {
         this.birthDate = birthDate;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.typeDocument = typeDocument;
+        this.documentType = documentType;
         CountryBirth = countryBirth;
         this.gender = gender;
         this.bloodType = bloodType;
-        this.rol = rol;
         this.photo = photo;
         this.userrol = userrol;
     }
@@ -67,11 +66,10 @@ public class User {
                 ", birthDate=" + birthDate +
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
-                ", typeDocument=" + typeDocument +
+                ", typeDocument=" + documentType +
                 ", CountryBirth=" + CountryBirth +
                 ", gender=" + gender +
                 ", bloodType=" + bloodType +
-                ", rol=" + rol +
                 ", photo='" + photo + '\'' +
                 ", userrol=" + userrol +
                 '}';
@@ -125,11 +123,11 @@ public class User {
         this.secondLastName = secondLastName;
     }
 
-    public Date getBirthDate() {
+    public LocalDate getBirthDate() {
         return birthDate;
     }
 
-    public void setBirthDate(Date birthDate) {
+    public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
     }
 
@@ -141,52 +139,44 @@ public class User {
         this.email = email;
     }
 
-    public String getPhoneNumber() {
+    public Long getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
-    public Long getTypeDocument() {
-        return typeDocument;
+    public String getDocumentType() {
+        return documentType;
     }
 
-    public void setTypeDocument(Long typeDocument) {
-        this.typeDocument = typeDocument;
+    public void setDocumentType(String documentType) {
+        this.documentType = documentType;
     }
 
-    public Long getCountryBirth() {
+    public String getCountryBirth() {
         return CountryBirth;
     }
 
-    public void setCountryBirth(Long countryBirth) {
+    public void setCountryBirth(String countryBirth) {
         CountryBirth = countryBirth;
     }
 
-    public Long getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Long gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
-    public Long getBloodType() {
+    public String getBloodType() {
         return bloodType;
     }
 
-    public void setBloodType(Long bloodType) {
+    public void setBloodType(String bloodType) {
         this.bloodType = bloodType;
-    }
-
-    public Long getRol() {
-        return rol;
-    }
-
-    public void setRol(Long rol) {
-        this.rol = rol;
     }
 
     public String getPhoto() {
@@ -204,4 +194,5 @@ public class User {
     public void setUserrol(Set<userRol> userrol) {
         this.userrol = userrol;
     }
+
 }

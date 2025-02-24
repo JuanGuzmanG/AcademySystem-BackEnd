@@ -6,6 +6,5 @@ import jjgg.academysystem.entities.userRol;
 import java.util.Set;
 
 public interface UserService {
-
-    public User saveUser(User user, Set<userRol> userRol) throws Exception;
+    User saveUser(User user, Set<userRol> userrol) throws Exception;
 }

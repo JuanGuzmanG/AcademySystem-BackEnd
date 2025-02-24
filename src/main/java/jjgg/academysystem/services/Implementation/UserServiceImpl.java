@@ -19,20 +19,19 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RolRepository rolRepository;
 
-
     @Override
-    public User saveUser(User user, Set<userRol> userRol) throws Exception {
+    public User saveUser(User user, Set<userRol> userrol) throws Exception {
         User localuser = userRepository.findByDocument(user.getDocument());
+
         if (localuser != null) {
             throw new Exception("User already exists");
         } else {
-            for (userRol ur : userRol) {
+            for (userRol ur : userrol) {
                 rolRepository.save(ur.getRol());
             }
-            user.getUserrol().addAll(userRol);
-            localuser = userRepository.save(user);
+            user.getUserrol().addAll(userrol);
         }
-        return localuser;
+        return userRepository.save(user);
     }
 }
 
