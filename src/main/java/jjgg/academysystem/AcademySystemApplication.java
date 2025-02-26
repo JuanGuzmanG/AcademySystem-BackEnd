@@ -2,7 +2,7 @@ package jjgg.academysystem;
 
 import jjgg.academysystem.entities.Rol;
 import jjgg.academysystem.entities.User;
-import jjgg.academysystem.entities.userRol;
+import jjgg.academysystem.entities.UserRol;
 import jjgg.academysystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -43,8 +43,8 @@ public class AcademySystemApplication implements CommandLineRunner {
         rol.setIdRol(1L);
         rol.setNameRol("admin");
 
-        Set<userRol> userRols  = new HashSet<>();
-        userRol userRol = new userRol();
+        Set<UserRol> userRols  = new HashSet<>();
+        UserRol userRol = new UserRol();
         userRol.setRol(rol);
         userRol.setUser(user);
         userRols.add(userRol);

@@ -1,5 +1,6 @@
 package jjgg.academysystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -27,8 +28,8 @@ public class User {
     private String photo;
     private String documentType;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "user")
-    private Set<userRol> userrol = new HashSet<>();
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "user")
+    private Set<UserRol> userrol = new HashSet<>();
 
     public User() {
     }
@@ -36,7 +37,7 @@ public class User {
     public User(Long document, String password, String firstName, String middleName, String lastName,
                 String secondLastName, LocalDate birthDate, String email, Long phoneNumber,
                 String documentType, String countryBirth, String gender, String bloodType,
-                String photo, Set<userRol> userrol) {
+                String photo, Set<UserRol> userrol) {
         this.document = document;
         this.password = password;
         this.firstName = firstName;
@@ -187,11 +188,11 @@ public class User {
         this.photo = photo;
     }
 
-    public Set<userRol> getUserrol() {
+    public Set<UserRol> getUserrol() {
         return userrol;
     }
 
-    public void setUserrol(Set<userRol> userrol) {
+    public void setUserrol(Set<UserRol> userrol) {
         this.userrol = userrol;
     }
 
