@@ -11,24 +11,24 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
+@CrossOrigin("*")
 public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @PostMapping("/save")
+    @PostMapping("/new_user")
     public User saveUser(@RequestBody User user) throws Exception{
+        user.setPhoto("url-front");
         Set<UserRol> userRols = new HashSet<>();
 
-        Rol rol = new Rol();
-        rol.setIdRol(2L);
-        rol.setNameRol("profesor");
+        Rol rol = new Rol(2L, "user", null);
 
         UserRol userRol = new UserRol();
         userRol.setUser(user);
         userRol.setRol(rol);
 
+        userRols.add(userRol);
         return userService.saveUser(user, userRols);
     }
 

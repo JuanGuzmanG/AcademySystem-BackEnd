@@ -28,7 +28,7 @@ public class AcademySystemApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         User user = new User();
         user.setDocument(123456789L);
-        user.setFirstName("Juan");
+        user.setFirstName("prueba");
         user.setMiddleName("Jose");
         user.setLastName("Guzman");
         user.setSecondLastName("Gomez");
@@ -38,6 +38,7 @@ public class AcademySystemApplication implements CommandLineRunner {
         user.setPhoto("url");
         user.setEmail("juan@hotmail.com");
         user.setDocumentType("CC");
+        user.setcountryBirth("Colombia");
 
         Rol rol = new Rol();
         rol.setIdRol(1L);

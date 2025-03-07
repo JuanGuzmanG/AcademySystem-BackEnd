@@ -2,14 +2,19 @@ package jjgg.academysystem.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jjgg.academysystem.models.Authority;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     @Column(nullable = false)
     private Long document;
@@ -21,7 +26,7 @@ public class User {
     private String secondLastName;
     private LocalDate birthDate;
     private String email;
-    private String CountryBirth;
+    private String countryBirth;
     private Long phoneNumber;
     private String gender;
     private String bloodType;
@@ -48,7 +53,7 @@ public class User {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.documentType = documentType;
-        CountryBirth = countryBirth;
+        this.countryBirth = countryBirth;
         this.gender = gender;
         this.bloodType = bloodType;
         this.photo = photo;
@@ -59,7 +64,6 @@ public class User {
     public String toString() {
         return "User{" +
                 "document=" + document +
-                ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", lastName='" + lastName + '\'' +
@@ -68,12 +72,48 @@ public class User {
                 ", email='" + email + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", typeDocument=" + documentType +
-                ", CountryBirth=" + CountryBirth +
+                ", CountryBirth=" + countryBirth +
                 ", gender=" + gender +
                 ", bloodType=" + bloodType +
                 ", photo='" + photo + '\'' +
                 ", userrol=" + userrol +
                 '}';
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<Authority> authorities = new HashSet<>();
+        this.userrol.forEach(userRol -> {
+            authorities.add(new Authority(userRol.getRol().getNameRol()));
+        });
+        return authorities;
+    }
+
+
+
+    @Override
+    public String getUsername() {
+        return "";
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
     }
 
     public Long getDocument() {
@@ -156,12 +196,12 @@ public class User {
         this.documentType = documentType;
     }
 
-    public String getCountryBirth() {
-        return CountryBirth;
+    public String getcountryBirth() {
+        return countryBirth;
     }
 
-    public void setCountryBirth(String countryBirth) {
-        CountryBirth = countryBirth;
+    public void setcountryBirth(String countryBirth) {
+        this.countryBirth = countryBirth;
     }
 
     public String getGender() {
