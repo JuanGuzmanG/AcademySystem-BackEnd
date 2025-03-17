@@ -13,7 +13,7 @@ public class Rol {
     private Long idRol;
     private String nameRol;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY, mappedBy = "rol")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "rol")
     @JsonIgnore
     private Set<UserRol> userRols = new HashSet<>();
 

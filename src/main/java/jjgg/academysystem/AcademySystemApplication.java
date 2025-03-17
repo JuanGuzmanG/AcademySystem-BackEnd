@@ -50,7 +50,10 @@ public class AcademySystemApplication implements CommandLineRunner {
         userRol.setUser(user);
         userRols.add(userRol);
 
-
-        userService.saveUser(user, userRols);
+        if(userService.getUser(user.getDocument()) == null){
+            userService.saveUser(user, userRols);
+        }else{
+            System.out.println("User already exists");
+        }
     }
 }

@@ -5,8 +5,11 @@ import jjgg.academysystem.entities.UserRol;
 import jjgg.academysystem.repositories.RolRepository;
 import jjgg.academysystem.repositories.UserRepository;
 import jjgg.academysystem.services.UserService;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
@@ -19,13 +22,15 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private RolRepository rolRepository;
 
+
     @Override
     public User saveUser(User user, Set<UserRol> userrol) throws Exception {
         User localuser = userRepository.findByDocument(user.getDocument());
 
         if (localuser != null) {
-
+            throw new Exception("User already exists");
         } else {
+
             for (UserRol ur : userrol) {
                 rolRepository.save(ur.getRol());
             }
@@ -35,8 +40,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User getUser(Long id) {
-        return  userRepository.findById(id).get();
+        User user = userRepository.findByUsername(String.valueOf(id));
+        if(user!=null){
+            Hibernate.initialize(user.getUserrol());
+        }
+        return user;
     }
 
     @Override
