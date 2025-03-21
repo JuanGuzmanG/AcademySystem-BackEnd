@@ -1,19 +1,24 @@
 package jjgg.academysystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     @Column(nullable = false)
     private Long document;
-
+    private String username;
     private String password;
     private String firstName;
     private String middleName;
@@ -34,11 +39,12 @@ public class User {
     public User() {
     }
 
-    public User(Long document, String password, String firstName, String middleName, String lastName,
+    public User(Long document, String username,String password, String firstName, String middleName, String lastName,
                 String secondLastName, LocalDate birthDate, String email, Long phoneNumber,
                 String documentType, String countryBirth, String gender, String bloodType,
                 String photo, Set<UserRol> userrol) {
         this.document = document;
+        this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.middleName = middleName;
@@ -59,6 +65,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "document=" + document +
+                " username=" + username +
                 ", firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", lastName='" + lastName + '\'' +
@@ -83,12 +90,45 @@ public class User {
         this.document = document;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public String getFirstName() {
@@ -157,14 +197,6 @@ public class User {
 
     public void setDocumentType(String documentType) {
         this.documentType = documentType;
-    }
-
-    public String getcountryBirth() {
-        return countryBirth;
-    }
-
-    public void setcountryBirth(String countryBirth) {
-        this.countryBirth = countryBirth;
     }
 
     public String getGender() {

@@ -3,8 +3,10 @@ package jjgg.academysystem;
 import jjgg.academysystem.entities.Rol;
 import jjgg.academysystem.entities.User;
 import jjgg.academysystem.entities.UserRol;
+import jjgg.academysystem.services.Implementation.UserServiceImpl;
 import jjgg.academysystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,8 +18,13 @@ import java.util.Set;
 @SpringBootApplication
 public class AcademySystemApplication implements CommandLineRunner {
 
+    @Value("${jwt.secret}")
+    private String secret;
+
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserServiceImpl userServiceImpl;
 
     public static void main(String[] args) {
         SpringApplication.run(AcademySystemApplication.class, args);
@@ -28,7 +35,8 @@ public class AcademySystemApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         User user = new User();
         user.setDocument(123456789L);
-        user.setFirstName("prueba");
+        user.setUsername(String.valueOf(user.getDocument()));
+        user.setFirstName("juan");
         user.setMiddleName("Jose");
         user.setLastName("Guzman");
         user.setSecondLastName("Gomez");
@@ -38,7 +46,7 @@ public class AcademySystemApplication implements CommandLineRunner {
         user.setPhoto("url");
         user.setEmail("juan@hotmail.com");
         user.setDocumentType("CC");
-        user.setcountryBirth("Colombia");
+        user.setCountryBirth("Colombia");
 
         Rol rol = new Rol();
         rol.setIdRol(1L);
@@ -51,7 +59,8 @@ public class AcademySystemApplication implements CommandLineRunner {
         userRols.add(userRol);
 
         if(userService.getUser(user.getDocument()) == null){
-            userService.saveUser(user, userRols);
+            userServiceImpl.saveUser(user, userRols);
+
         }else{
             System.out.println("User already exists");
         }

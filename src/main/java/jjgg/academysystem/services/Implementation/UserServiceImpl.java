@@ -21,6 +21,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RolRepository rolRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -30,22 +32,18 @@ public class UserServiceImpl implements UserService {
         if (localuser != null) {
             throw new Exception("User already exists");
         } else {
-
             for (UserRol ur : userrol) {
                 rolRepository.save(ur.getRol());
             }
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.getUserrol().addAll(userrol);
         }
         return userRepository.save(user);
     }
 
     @Override
-    @Transactional
     public User getUser(Long id) {
-        User user = userRepository.findByUsername(String.valueOf(id));
-        if(user!=null){
-            Hibernate.initialize(user.getUserrol());
-        }
+        User user = userRepository.findByDocument(id);
         return user;
     }
 

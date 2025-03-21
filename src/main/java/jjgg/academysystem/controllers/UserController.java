@@ -3,6 +3,9 @@ package jjgg.academysystem.controllers;
 import jjgg.academysystem.entities.Rol;
 import jjgg.academysystem.entities.User;
 import jjgg.academysystem.entities.UserRol;
+import jjgg.academysystem.security.AuthResponse;
+import jjgg.academysystem.services.Implementation.UserServiceImpl;
+import jjgg.academysystem.services.JWTService;
 import jjgg.academysystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +19,8 @@ import java.util.Set;
 public class UserController {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
+
     @PostMapping("/new_user")
     public User saveUser(@RequestBody User user) throws Exception{
         user.setPhoto("url-front");
@@ -29,16 +33,17 @@ public class UserController {
         userRol.setRol(rol);
 
         userRols.add(userRol);
-        return userService.saveUser(user, userRols);
+
+        return userServiceImpl.saveUser(user, userRols);
     }
 
     @GetMapping("/get_user_{id}")
     public User getUser(@PathVariable Long id){
-        return userService.getUser(id);
+        return userServiceImpl.getUser(id);
     }
 
     @DeleteMapping("/delete_{id}")
     public void deleteUser(@PathVariable Long id){
-        userService.deleteUser(id);
+        userServiceImpl.deleteUser(id);
     }
 }
