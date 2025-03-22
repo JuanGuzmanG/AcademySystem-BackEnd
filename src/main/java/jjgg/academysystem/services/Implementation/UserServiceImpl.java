@@ -7,10 +7,12 @@ import jjgg.academysystem.repositories.UserRepository;
 import jjgg.academysystem.services.UserService;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -21,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private RolRepository rolRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -45,6 +48,11 @@ public class UserServiceImpl implements UserService {
     public User getUser(Long id) {
         User user = userRepository.findByDocument(id);
         return user;
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     @Override

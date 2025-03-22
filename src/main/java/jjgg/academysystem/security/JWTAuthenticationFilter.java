@@ -33,7 +33,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
         final String Token = getTokenFromRequest(request);
         final String username;
-        if (Token != null) {
+        if (Token == null) {
             filterChain.doFilter(request, response);
             return;
         }

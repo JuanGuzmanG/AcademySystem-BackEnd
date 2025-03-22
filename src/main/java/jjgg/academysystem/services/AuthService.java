@@ -1,5 +1,6 @@
 package jjgg.academysystem.services;
 
+import jjgg.academysystem.entities.User;
 import jjgg.academysystem.repositories.UserRepository;
 import jjgg.academysystem.security.AuthResponse;
 import jjgg.academysystem.security.LoginRequest;
