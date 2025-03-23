@@ -9,6 +9,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -26,7 +30,6 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
                     .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/users/**").authenticated()
                     .anyRequest().authenticated()
             )
                 .sessionManagement(sessionManagement ->
@@ -34,5 +37,16 @@ public class SecurityConfig {
                 .authenticationProvider(authProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .build();
+    }
+    @Bean
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.setAllowedOrigins(List.of("http://localhost:4200")); // Permitir solicitudes desde Angular
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 }

@@ -34,14 +34,14 @@ public class AcademySystemApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         User user = new User();
-        user.setDocument(123456789L);
+        user.setDocument(123L);
         user.setUsername(String.valueOf(user.getDocument()));
         user.setFirstName("juan");
         user.setMiddleName("Jose");
         user.setLastName("Guzman");
         user.setSecondLastName("Gomez");
         user.setBirthDate(LocalDate.of(1995, 10, 10));
-        user.setPassword("123456");
+        user.setPassword("123");
         user.setPhoneNumber(1234562323L);
         user.setPhoto("url");
         user.setEmail("juan@hotmail.com");
