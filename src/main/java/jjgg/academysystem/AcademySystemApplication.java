@@ -35,7 +35,6 @@ public class AcademySystemApplication implements CommandLineRunner {
     public void run(String... args) throws Exception {
         User user = new User();
         user.setDocument(123L);
-        user.setUsername(String.valueOf(user.getDocument()));
         user.setFirstName("juan");
         user.setMiddleName("Jose");
         user.setLastName("Guzman");
