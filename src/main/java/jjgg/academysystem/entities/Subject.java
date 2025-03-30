@@ -22,4 +22,5 @@ public class Subject {
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Test> tests = new LinkedHashSet<>();
+
 }

@@ -1,9 +1,11 @@
 package jjgg.academysystem.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name="questions")
+@Data
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
