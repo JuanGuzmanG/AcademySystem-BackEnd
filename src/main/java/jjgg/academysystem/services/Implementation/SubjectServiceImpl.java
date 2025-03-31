@@ -6,6 +6,7 @@ import jjgg.academysystem.services.SubjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public Set<Subject> getAll() {
-        return new LinkedHashSet<>(subjectReposiroty.findAll());
+        return new HashSet<>(subjectReposiroty.findAll());
     }
 
     @Override

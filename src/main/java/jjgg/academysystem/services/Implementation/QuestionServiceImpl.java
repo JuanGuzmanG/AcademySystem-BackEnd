@@ -32,12 +32,12 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Set<Question> getByTest(Question question) {
-        return questionRepository.findByTest(question);
+    public Set<Question> getByTest(Test test) {
+        return questionRepository.findByTest(test);
     }
 
     @Override
-    public Question getById(Long id) {
+    public Question getQuestionById(Long id) {
         return questionRepository.findById(id).get();
     }
 

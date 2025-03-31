@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/subjects")
-@CrossOrigin(origins = "*")
+@CrossOrigin("*")
 public class SubjectController {
 
     @Autowired
@@ -30,7 +30,7 @@ public class SubjectController {
         }
     }
 
-    @GetMapping("/Subjectslist")
+    @GetMapping("/subjectslist")
     public ResponseEntity<?> getAllSubjects() {
         return ResponseEntity.ok(subjectService.getAll());
     }

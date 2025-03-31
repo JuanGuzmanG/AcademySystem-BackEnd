@@ -8,15 +8,16 @@ import java.util.Set;
 
 @Service
 public interface QuestionService {
+
     Question save(Question question);
 
     Question update(Question question);
 
     Set<Question> getAll();
 
-    Set<Question> getByTest(Question question);
+    Set<Question> getByTest(Test test);
 
-    Question getById(Long id);
+    Question getQuestionById(Long id);
 
     void delete(Long id);
 }

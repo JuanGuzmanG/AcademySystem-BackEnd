@@ -24,29 +24,28 @@ public class QuestionController {
     private TestService testService;
 
     @GetMapping("/{idQuestion}")
-    public ResponseEntity<Question> getById(@PathVariable Long idQuestion) {
-        Question question = questionService.getById(idQuestion);
-        return ResponseEntity.ok(question);
+    public Question getById(@PathVariable Long idQuestion) {
+        return questionService.getQuestionById(idQuestion);
     }
 
     @GetMapping("/questionslist")
-    public ResponseEntity<?> getAllQuestions() {
-        return ResponseEntity.ok(questionService.getAll());
-    }
-
-    @GetMapping("/question/{idTest}")
-    public ResponseEntity<?> getQuestionsByTest(@PathVariable Long idTest) {
-        Test test = testService.getById(idTest);
-        Set<Question> questions = test.getQuestions();
-
-        List tests = new ArrayList<>(questions);
-        if(tests.size() > test.getCantQuestions()){
-            tests = tests.subList(0, test.getCantQuestions()+1);
+        public ResponseEntity<?> getAllQuestions() {
+            return ResponseEntity.ok(questionService.getAll());
         }
 
-        Collections.shuffle(tests);
-        return ResponseEntity.ok(tests);
-    }
+    @GetMapping("/question/{idTest}")
+        public ResponseEntity<?> getQuestionsByTest(@PathVariable Long idTest) {
+            Test test = testService.getById(idTest);
+            Set<Question> questions = test.getQuestions();
+
+            List tests = new ArrayList<>(questions);
+            if(tests.size() > test.getCantQuestions()){
+                tests = tests.subList(0, test.getCantQuestions()+1);
+            }
+
+            Collections.shuffle(tests);
+            return ResponseEntity.ok(tests);
+        }
 
     @PostMapping("/add")
         public ResponseEntity<Question> addQuestion(@RequestBody Question question) {
