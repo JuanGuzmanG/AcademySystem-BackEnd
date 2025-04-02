@@ -35,8 +35,7 @@ public class TestController {
         }
 
     @DeleteMapping("/delete/{idTest}")
-        public ResponseEntity<?> deleteTest(@PathVariable Long idTest) {
+        public void deleteTest(@PathVariable Long idTest) {
             testService.deleteById(idTest);
-            return ResponseEntity.ok("Test deleted successfully");
         }
 }

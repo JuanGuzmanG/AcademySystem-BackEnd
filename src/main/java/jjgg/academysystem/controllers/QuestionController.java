@@ -33,7 +33,7 @@ public class QuestionController {
             return ResponseEntity.ok(questionService.getAll());
         }
 
-    @GetMapping("/question/{idTest}")
+    @GetMapping("/test/{idTest}")
         public ResponseEntity<?> getQuestionsByTest(@PathVariable Long idTest) {
             Test test = testService.getById(idTest);
             Set<Question> questions = test.getQuestions();
