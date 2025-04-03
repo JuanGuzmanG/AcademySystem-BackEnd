@@ -49,8 +49,7 @@ public class QuestionController {
 
     @PostMapping("/add")
         public ResponseEntity<Question> addQuestion(@RequestBody Question question) {
-            Question createdQuestion = questionService.save(question);
-            return ResponseEntity.ok(createdQuestion);
+            return ResponseEntity.ok(questionService.save(question));
         }
 
     @PutMapping("update")

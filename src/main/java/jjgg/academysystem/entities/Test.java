@@ -2,7 +2,6 @@ package jjgg.academysystem.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +13,7 @@ public class Test {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTest;
 
-    private String nameTest;
+    private String testName;
     private String descriptionTest;
     private String maxPoints;
     private int cantQuestions;
@@ -28,9 +27,9 @@ public class Test {
     private Set<Question> questions = new HashSet<>();
 
     public Test(){}
-    public Test(Long idTest, String nameTest, String descriptionTest, String maxPoints, int cantQuestions, boolean active, Subject subject, Set<Question> questions) {
+    public Test(Long idTest, String testName, String descriptionTest, String maxPoints, int cantQuestions, boolean active, Subject subject, Set<Question> questions) {
         this.idTest = idTest;
-        this.nameTest = nameTest;
+        this.testName = testName;
         this.descriptionTest = descriptionTest;
         this.maxPoints = maxPoints;
         this.cantQuestions = cantQuestions;
@@ -47,12 +46,12 @@ public class Test {
         this.idTest = idTest;
     }
 
-    public String getNameTest() {
-        return nameTest;
+    public String getTestName() {
+        return testName;
     }
 
-    public void setNameTest(String nameTest) {
-        this.nameTest = nameTest;
+    public void setTestName(String nameTest) {
+        this.testName = nameTest;
     }
 
     public String getDescriptionTest() {
