@@ -52,15 +52,14 @@ public class QuestionController {
             return ResponseEntity.ok(questionService.save(question));
         }
 
-    @PutMapping("update")
+    @PutMapping("/update")
         public ResponseEntity<Question> updateQuestion(@RequestBody Question question) {
             Question updatedQuestion = questionService.update(question);
             return ResponseEntity.ok(updatedQuestion);
         }
 
     @DeleteMapping("/delete/{idQuestion}")
-        public ResponseEntity<?> deleteQuestion(@PathVariable Long idQuestion) {
+        public void deleteQuestion(@PathVariable Long idQuestion) {
             questionService.delete(idQuestion);
-            return ResponseEntity.ok("Question deleted successfully");
         }
 }

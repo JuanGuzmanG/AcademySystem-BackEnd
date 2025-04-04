@@ -1,10 +1,13 @@
 package jjgg.academysystem.controllers;
 
+import jjgg.academysystem.entities.Subject;
 import jjgg.academysystem.entities.Test;
 import jjgg.academysystem.services.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/test")
@@ -23,6 +26,13 @@ public class TestController {
     public ResponseEntity<?> getAllTests() {
         return ResponseEntity.ok(testService.findAll());
     }
+
+    @GetMapping("/subject/{idSubject}")
+        public List<Test> getAllTestsBySubject(@PathVariable Long idSubject) {
+            Subject subject = new Subject();
+            subject.setIdSubject(idSubject);
+            return testService.getAllTestsBySubject(subject);
+        }
 
     @PostMapping("/add")
         public ResponseEntity<Test> addQuestion(@RequestBody Test test) {
