@@ -34,6 +34,18 @@ public class TestController {
             return testService.getAllTestsBySubject(subject);
         }
 
+    @GetMapping("/active")
+        public List<Test> getAllActiveTests() {
+            return testService.getAllTestsByActive();
+        }
+
+    @GetMapping("/active/{subjectId}")
+        public List<Test> getAllActiveTestsBySubject(@PathVariable Long subjectId) {
+            Subject subject = new Subject();
+            subject.setIdSubject(subjectId);
+            return testService.getAllTestsBySubjectAndActive(subject);
+        }
+
     @PostMapping("/add")
         public ResponseEntity<Test> addQuestion(@RequestBody Test test) {
             return ResponseEntity.ok(testService.save(test));

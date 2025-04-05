@@ -10,4 +10,8 @@ import java.util.List;
 @Repository
 public interface TestRepository extends JpaRepository<Test, Long>{
     List<Test> findBySubject(Subject subject);
+    
+    List<Test> findByActive(boolean state);
+
+    List<Test> findBySubjectAndActive(Subject subject, boolean state);
 }

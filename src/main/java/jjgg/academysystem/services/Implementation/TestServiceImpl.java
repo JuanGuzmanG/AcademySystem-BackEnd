@@ -43,6 +43,16 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
+    public List<Test> getAllTestsByActive() {
+        return testRepository.findByActive(true);
+    }
+
+    @Override
+    public List<Test> getAllTestsBySubjectAndActive(Subject subject) {
+        return testRepository.findBySubjectAndActive(subject,true);
+    }
+
+    @Override
     public void deleteById(Long id) {
         Test test = new Test();
         test.setIdTest(id);
