@@ -10,5 +10,6 @@ import java.util.Set;
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long> {
     Set<Question> findByTest(Test test);
-    
+
+
 }
