@@ -49,7 +49,8 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question ListQuestion(Long id){
-        return this.questionRepository.getOne(id);
+    public Question ListQuestion(Long id) {
+        return questionRepository.getOne(id);
     }
+
 }

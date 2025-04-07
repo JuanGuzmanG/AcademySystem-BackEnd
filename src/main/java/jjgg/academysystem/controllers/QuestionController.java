@@ -51,24 +51,24 @@ public class QuestionController {
 
     @PostMapping("/evaluateTest")
         public ResponseEntity<?> evaluateTest(@RequestBody List<Question> questions) {
-            double maxPoits = 0;
-            Integer cantCorrect = 0;
+            double pointsEarned = 0;
+            Integer correctAnswers = 0;
             Integer attempts = 0;
             for(Question q : questions){
                 Question question = questionService.ListQuestion(q.getIdQuestion());
-                if(question.getSelectedAnswer().equals(q.getSelectedAnswer())){
-                    cantCorrect++;
+                if(question.getCorrectOption().equals(q.getSelectedAnswer())){
+                    correctAnswers++;
                     double points = Double.parseDouble(questions.get(0).getTest().getMaxPoints())/questions.size();
-                    maxPoits += points;
+                    pointsEarned += points;
                 }
                 if(q.getSelectedAnswer() != null){
                     attempts++;
                 }
             }
         Map<String,Object> answers = new HashMap<>();
-        answers.put("cantCorrect",cantCorrect);
+        answers.put("cantCorrect",correctAnswers);
         answers.put("attempts",attempts);
-        answers.put("maxPoints",maxPoits);
+        answers.put("maxPoints",pointsEarned);
         return ResponseEntity.ok(answers);
         }
 

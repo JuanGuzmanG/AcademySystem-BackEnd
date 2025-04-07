@@ -21,5 +21,5 @@ public interface QuestionService {
 
     void delete(Long id);
 
-    Question ListQuestion(Long questionID);
+    Question ListQuestion(Long id);
 }
