@@ -5,14 +5,10 @@ import jjgg.academysystem.entities.UserRol;
 import jjgg.academysystem.repositories.RolRepository;
 import jjgg.academysystem.repositories.UserRepository;
 import jjgg.academysystem.services.UserService;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Service

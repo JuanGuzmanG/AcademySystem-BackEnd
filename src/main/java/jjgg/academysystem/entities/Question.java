@@ -1,7 +1,6 @@
 package jjgg.academysystem.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 @Entity
 @Table(name="questions")

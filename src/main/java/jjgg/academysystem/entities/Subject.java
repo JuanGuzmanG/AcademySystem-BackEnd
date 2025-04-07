@@ -2,7 +2,6 @@ package jjgg.academysystem.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
