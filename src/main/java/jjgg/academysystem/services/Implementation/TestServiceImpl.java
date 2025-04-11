@@ -53,7 +53,7 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void delete(Long id) {
         Test test = new Test();
         test.setIdTest(id);
         testRepository.delete(test);

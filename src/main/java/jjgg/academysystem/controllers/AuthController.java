@@ -13,9 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -38,17 +35,6 @@ public class AuthController {
 
     @PostMapping("/new_user")
     public User saveUser(@RequestBody User user) throws Exception{
-        user.setPhoto("url-front");
-        Set<UserRol> userRols = new HashSet<>();
-
-        Rol rol = new Rol(2L, "user", null);
-
-        UserRol userRol = new UserRol();
-        userRol.setUser(user);
-        userRol.setRol(rol);
-
-        userRols.add(userRol);
-
-        return userServiceImpl.saveUser(user, userRols);
+        return userServiceImpl.saveUser(user);
     }
 }

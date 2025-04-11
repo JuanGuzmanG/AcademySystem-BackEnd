@@ -32,7 +32,7 @@ public class User implements UserDetails {
     private String photo;
     private String documentType;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "user",orphanRemoval = true)
     private Set<UserRol> userrol = new HashSet<>();
 
     public User() {

@@ -58,6 +58,6 @@ public class TestController {
 
     @DeleteMapping("/delete/{idTest}")
         public void deleteTest(@PathVariable Long idTest) {
-            testService.deleteById(idTest);
+            testService.delete(idTest);
         }
 }

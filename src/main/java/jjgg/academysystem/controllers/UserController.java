@@ -1,8 +1,9 @@
 package jjgg.academysystem.controllers;
 
 import jjgg.academysystem.entities.User;
-import jjgg.academysystem.services.Implementation.UserServiceImpl;
+import jjgg.academysystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -13,20 +14,26 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private UserServiceImpl userServiceImpl;
+    private UserService userService;
 
     @GetMapping("/get_user_{id}")
     public User getUser(@PathVariable Long id){
-        return userServiceImpl.getUser(id);
+        return userService.getUser(id);
     }
 
-    @DeleteMapping("/delete_{id}")
+    @GetMapping("all_users")
+    public ResponseEntity<?> getAllUsers(){
+        return ResponseEntity.ok(userService.getallusers());
+    }
+
+    @DeleteMapping("/delete/{id}")
     public void deleteUser(@PathVariable Long id){
-        userServiceImpl.deleteUser(id);
+        userService.deleteUser(id);
     }
 
     @GetMapping("/userlogged")
     public User getLoggedUser(@AuthenticationPrincipal UserDetails userDetails) {
-        return this.userServiceImpl.getUserByUsername(userDetails.getUsername());
+        return this.userService.getUserByUsername(userDetails.getUsername());
     }
+
 }

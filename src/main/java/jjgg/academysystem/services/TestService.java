@@ -24,5 +24,5 @@ public interface TestService {
 
     List<Test> getAllTestsBySubjectAndActive(Subject subject);
 
-    void deleteById(Long id);
+    void delete(Long id);
 }
