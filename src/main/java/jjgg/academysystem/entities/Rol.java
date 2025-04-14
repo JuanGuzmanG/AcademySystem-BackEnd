@@ -1,6 +1,5 @@
 package jjgg.academysystem.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -13,17 +12,16 @@ public class Rol {
     private Long idRol;
     private String nameRol;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER, mappedBy = "rol")
-    @JsonIgnore
-    private Set<UserRol> userRols = new HashSet<>();
+    @ManyToMany(mappedBy = "rols")
+    private Set<User> users = new HashSet<>();
 
     public Rol() {
     }
 
-    public Rol(Long idRol, String nameRol, Set<UserRol> userRols) {
+    public Rol(Long idRol, String nameRol, Set<User> users) {
         this.idRol = idRol;
         this.nameRol = nameRol;
-        this.userRols = userRols;
+        this.users = users;
     }
 
     @Override
@@ -31,7 +29,6 @@ public class Rol {
         return "Rol{" +
                 "idRol=" + idRol +
                 ", nameRol='" + nameRol + '\'' +
-                ", userRols=" + userRols +
                 '}';
     }
 
@@ -51,11 +48,11 @@ public class Rol {
         this.nameRol = nameRol;
     }
 
-    public Set<UserRol> getUserRols() {
-        return userRols;
+    public Set<User> getUsers() {
+        return users;
     }
 
-    public void setUserRols(Set<UserRol> userRols) {
-        this.userRols = userRols;
+    public void setUsers(Set<User> userRols) {
+        this.users = userRols;
     }
 }

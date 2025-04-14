@@ -2,7 +2,6 @@ package jjgg.academysystem.services.Implementation;
 
 import jjgg.academysystem.entities.Rol;
 import jjgg.academysystem.entities.User;
-import jjgg.academysystem.entities.UserRol;
 import jjgg.academysystem.repositories.RolRepository;
 import jjgg.academysystem.repositories.UserRepository;
 import jjgg.academysystem.services.UserService;
@@ -27,32 +26,6 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public User saveUser(User user) throws Exception {
-        User localuser = userRepository.findById(user.getDocument()).orElse(null);
-
-        if (localuser != null) {
-            throw new Exception("User already exists");
-        }
-        user.setPhoto("url-front");
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setUsername(String.valueOf(user.getDocument()));
-
-        userRepository.save(user);
-
-        Rol rol = rolRepository.findById(2L).orElse(null);
-
-        UserRol userRol = new UserRol();
-        userRol.setUser(user);
-        userRol.setRol(rol);
-
-        Set<UserRol> userRols = new HashSet<>();
-        userRols.add(userRol);
-        User userdb = userRepository.findById(user.getDocument()).orElse(null);
-        userdb.getUserrol().addAll(userRols);
-        return userdb;
-    }
-
-    @Override
     public Set<User> getallusers() {
         return new HashSet<>(userRepository.findAll());
     }
@@ -69,12 +42,33 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    @Override
+    public User saveUser(User user) throws Exception {
+        User localuser = userRepository.findById(user.getDocument()).orElse(null);
+
+        if (localuser != null) {
+            throw new Exception("User already exists");
+        }
+        user.setPhoto("url-front");
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setUsername(String.valueOf(user.getDocument()));
+
+        Set<Rol> roles = new HashSet<>();
+        Rol rol = rolRepository.findById(2L).orElse(null);
+        roles.add(rol);
+        user.setRols(roles);
+        return userRepository.save(user);
+    }
+
+    @Override
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
+
     @Transactional
     @Override
     public void deleteUser(Long id) {
-        User user = userRepository.findById(id).get();
-        user.getUserrol().clear();
-        userRepository.delete(user);
+        userRepository.deleteById(id);
     }
 }
 

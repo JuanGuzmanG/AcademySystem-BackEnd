@@ -26,14 +26,21 @@ public class UserController {
         return ResponseEntity.ok(userService.getallusers());
     }
 
+    @GetMapping("/userlogged")
+    public User getLoggedUser(@AuthenticationPrincipal UserDetails userDetails) {
+        return this.userService.getUserByUsername(userDetails.getUsername());
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<User> updateUser(@RequestBody User user){
+        return ResponseEntity.ok(userService.updateUser(user));
+    }
+
     @DeleteMapping("/delete/{id}")
     public void deleteUser(@PathVariable Long id){
         userService.deleteUser(id);
     }
 
-    @GetMapping("/userlogged")
-    public User getLoggedUser(@AuthenticationPrincipal UserDetails userDetails) {
-        return this.userService.getUserByUsername(userDetails.getUsername());
-    }
+
 
 }

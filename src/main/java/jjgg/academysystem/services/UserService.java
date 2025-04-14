@@ -1,16 +1,18 @@
 package jjgg.academysystem.services;
 
 import jjgg.academysystem.entities.User;
-import jjgg.academysystem.entities.UserRol;
 
 import java.util.Set;
 
 public interface UserService {
-    User saveUser(User user) throws Exception;
 
     Set<User> getallusers();
 
     User getUser(Long id);
+
+    User saveUser(User user) throws Exception;
+
+    User updateUser(User user);
 
     void deleteUser(Long id);
 

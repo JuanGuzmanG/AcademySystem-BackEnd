@@ -1,8 +1,6 @@
 package jjgg.academysystem.controllers;
 
-import jjgg.academysystem.entities.Rol;
 import jjgg.academysystem.entities.User;
-import jjgg.academysystem.entities.UserRol;
 import jjgg.academysystem.exceptions.UserNotFoundException;
 import jjgg.academysystem.security.AuthResponse;
 import jjgg.academysystem.security.LoginRequest;

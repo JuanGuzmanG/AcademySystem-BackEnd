@@ -1,5 +1,6 @@
 package jjgg.academysystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -32,8 +33,15 @@ public class User implements UserDetails {
     private String photo;
     private String documentType;
 
-    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "user",orphanRemoval = true)
-    private Set<UserRol> userrol = new HashSet<>();
+    @ManyToMany(
+            fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_rol",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "rol_id")
+    )
+    @JsonIgnore
+    private Set<Rol> rols = new HashSet<>();
 
     public User() {
     }
@@ -41,7 +49,7 @@ public class User implements UserDetails {
     public User(Long document, String username,String password, String firstName, String middleName, String lastName,
                 String secondLastName, LocalDate birthDate, String email, Long phoneNumber,
                 String documentType, String countryBirth, String gender, String bloodType,
-                String photo, Set<UserRol> userrol) {
+                String photo, Set<Rol> rols) {
         this.document = document;
         this.username = username;
         this.password = password;
@@ -57,7 +65,7 @@ public class User implements UserDetails {
         this.gender = gender;
         this.bloodType = bloodType;
         this.photo = photo;
-        this.userrol = userrol;
+        this.rols = rols;
     }
 
     @Override
@@ -77,7 +85,7 @@ public class User implements UserDetails {
                 ", gender=" + gender +
                 ", bloodType=" + bloodType +
                 ", photo='" + photo + '\'' +
-                ", userrol=" + userrol +
+                ", roles=" + rols.stream().map(Rol::getNameRol).toList() +
                 '}';
     }
 
@@ -91,8 +99,8 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return userrol.stream().map(userrol ->
-                new SimpleGrantedAuthority(userrol.getRol().getNameRol().toUpperCase()))
+        return rols.stream().map(rol ->
+                new SimpleGrantedAuthority(rol.getNameRol().toUpperCase()))
                 .collect(Collectors.toList());
     }
 
@@ -222,12 +230,12 @@ public class User implements UserDetails {
         this.photo = photo;
     }
 
-    public Set<UserRol> getUserrol() {
-        return userrol;
+    public Set<Rol> getRols() {
+        return rols;
     }
 
-    public void setUserrol(Set<UserRol> userrol) {
-        this.userrol = userrol;
+    public void setRols(Set<Rol> userrol) {
+        this.rols = userrol;
     }
 
 }
