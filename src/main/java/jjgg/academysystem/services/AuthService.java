@@ -23,6 +23,7 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) throws Exception {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword()));
         UserDetails user = userRepository.findByUsername(request.getUsername()).orElseThrow();
+        System.out.println(user.getUsername());
         String token = jwtService.getToken(user);
         return AuthResponse.builder()
                 .token(token)

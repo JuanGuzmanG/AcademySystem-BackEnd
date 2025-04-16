@@ -1,5 +1,6 @@
 package jjgg.academysystem.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -13,6 +14,7 @@ public class Rol {
     private String nameRol;
 
     @ManyToMany(mappedBy = "rols")
+    @JsonIgnore
     private Set<User> users = new HashSet<>();
 
     public Rol() {
