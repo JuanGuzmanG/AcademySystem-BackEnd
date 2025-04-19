@@ -16,7 +16,7 @@ public class Subject {
     private String nameSubject;
     private String descriptionSubject;
 
-    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnore
     private Set<Test> tests = new LinkedHashSet<>();
 

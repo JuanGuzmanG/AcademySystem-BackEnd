@@ -22,7 +22,7 @@ public class Test {
     @ManyToOne(fetch = FetchType.EAGER)
     private Subject subject;
 
-    @OneToMany(mappedBy = "test", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "test", fetch = FetchType.LAZY,cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnore
     private Set<Question> questions = new HashSet<>();
 
