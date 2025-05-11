@@ -6,18 +6,17 @@ import jjgg.academysystem.security.AuthResponse;
 import jjgg.academysystem.security.LoginRequest;
 import jjgg.academysystem.services.AuthService;
 import jjgg.academysystem.services.Implementation.UserServiceImpl;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
 @CrossOrigin("*")
 public class AuthController {
 
-    private final AuthService authService;
+    @Autowired
+    private AuthService authService;
 
     @Autowired
     private UserServiceImpl userServiceImpl;
