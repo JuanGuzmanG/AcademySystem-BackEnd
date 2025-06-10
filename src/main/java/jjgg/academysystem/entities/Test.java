@@ -26,6 +26,10 @@ public class Test {
     @JsonIgnore
     private Set<Question> questions = new HashSet<>();
 
+    @OneToMany(mappedBy = "test",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Result> results = new HashSet<>();
+
     public Test(){}
     public Test(Long idTest, String testName, String descriptionTest, String maxPoints, int cantQuestions, boolean active, Subject subject, Set<Question> questions) {
         this.idTest = idTest;
@@ -100,5 +104,13 @@ public class Test {
 
     public void setQuestions(Set<Question> questions) {
         this.questions = questions;
+    }
+
+    public Set<Result> getResults() {
+        return results;
+    }
+
+    public void setResults(Set<Result> results) {
+        this.results = results;
     }
 }

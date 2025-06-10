@@ -1,23 +1,22 @@
-package jjgg.academysystem.security;
+package jjgg.academysystem.DTO;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class LoginRequest {
+public class UserLoginDTO {
 
-    @NotBlank(message = "The username cannot be empty")
+    @NotBlank(message = "Username cannot be blank")
     private String username;
 
-    @NotBlank(message = "The password cannot be empty")
+    @NotBlank(message = "Password cannot be blank")
     private String password;
 
-    public LoginRequest() {}
+    public UserLoginDTO(){}
 
-    public LoginRequest(String username, String password) {
+    public UserLoginDTO(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
-    // Getters y Setters
     public String getUsername() {
         return username;
     }

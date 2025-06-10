@@ -1,12 +1,19 @@
 package jjgg.academysystem.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jjgg.academysystem.entities.User;
 import jjgg.academysystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
+
 
 @RestController
 @RequestMapping("/users")
@@ -15,6 +22,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @GetMapping("/get_user_{id}")
     public User getUser(@PathVariable Long id){
@@ -32,8 +42,19 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<User> updateUser(@RequestBody User user){
-        return ResponseEntity.ok(userService.updateUser(user));
+    public ResponseEntity<?> updateUser(
+            @RequestPart("user") String userStr,
+            @RequestPart(value = "photoFile", required = false)
+            MultipartFile photoFile){
+        try{
+            User user = objectMapper.readValue(userStr, User.class);
+            User updatedUser = userService.updateUser(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(updatedUser);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Error parsing user data: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error updating user: " + e.getMessage()));
+        }
     }
 
     @DeleteMapping("/delete/{id}")

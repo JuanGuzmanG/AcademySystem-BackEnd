@@ -30,6 +30,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
                     .requestMatchers("/auth/**").permitAll()
+                    .requestMatchers("/media/**").permitAll() // Permitir acceso a los recursos estáticos
                     .anyRequest().authenticated()
             )
                 .sessionManagement(sessionManagement ->

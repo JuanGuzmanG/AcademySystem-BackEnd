@@ -42,6 +42,10 @@ public class User implements UserDetails {
     )
     private Set<Rol> rols = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Set<Result> results = new HashSet<>();
+
     public User() {
     }
 
@@ -237,4 +241,11 @@ public class User implements UserDetails {
         this.rols = userrol;
     }
 
+    public Set<Result> getResults() {
+        return results;
+    }
+
+    public void setResults(Set<Result> results) {
+        this.results = results;
+    }
 }
