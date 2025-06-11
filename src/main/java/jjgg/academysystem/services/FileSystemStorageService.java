@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -14,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -36,13 +38,22 @@ public class FileSystemStorageService implements StorageService {
             if(file.isEmpty()) {
                 throw new IllegalArgumentException("Cannot store empty file");
             }
-            String filename = file.getOriginalFilename();
-            Path destinationFile = rootLocation.resolve(Paths.get(filename))
+            String Originalfilename = file.getOriginalFilename();
+
+            String extension = StringUtils.getFilenameExtension(Originalfilename);
+
+            String uniqueFilename = UUID.randomUUID().toString();
+            if(extension != null && !extension.isEmpty()) {
+                uniqueFilename += "." + extension;
+            }
+
+            Path destinationFile = rootLocation.resolve(Paths.get(uniqueFilename))
                 .normalize().toAbsolutePath();
+
             try(InputStream inputStream = file.getInputStream()){
                 Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
             }
-            return filename;
+            return uniqueFilename;
         } catch (IOException e) {
             throw new RuntimeException("Field to store file",e);
         }
