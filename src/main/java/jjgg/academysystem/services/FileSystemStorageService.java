@@ -75,4 +75,21 @@ public class FileSystemStorageService implements StorageService {
             throw new RuntimeException("Could not read file: ",e);
         }
     }
+
+    @Override
+    public void delete(String filename) {
+        if(filename==null || filename.isEmpty()) {
+            return;
+        }
+        try{
+            Path fileToDelete = rootLocation.resolve(filename).normalize().toAbsolutePath();
+
+            if(!fileToDelete.getParent().equals(rootLocation.toAbsolutePath())) {
+                throw new IllegalArgumentException("Cannot delete file outside of storage location");
+            }
+            Files.deleteIfExists(fileToDelete);
+        } catch(IOException e) {
+            throw new RuntimeException("Failed to delete file: " + filename, e);
+        }
+    }
 }

@@ -56,18 +56,27 @@ public class AuthController {
 
     @PostMapping("/new_user")
     public User saveUser(@RequestParam("user") String userJson,
-                         @RequestParam("file") MultipartFile multipartFile,
+                         @RequestParam(value = "file", required = false) MultipartFile multipartFile,
                          HttpServletRequest request) throws Exception{
 
         User user = objectMapper.readValue(userJson, User.class);
 
-        String path = storageService.store(multipartFile);
-        String url = ServletUriComponentsBuilder
-                .fromCurrentContextPath()
-                .path("/media/")
-                .path(path)
-                .toUriString();
-        user.setPhoto(url);
+       if(multipartFile != null && !multipartFile.isEmpty()) {
+           String path = storageService.store(multipartFile);
+           String url = ServletUriComponentsBuilder
+                   .fromCurrentContextPath()
+                   .path("/media/")
+                   .path(path)
+                   .toUriString();
+           user.setPhoto(url);
+       } else {
+           String defaultURL = ServletUriComponentsBuilder
+                   .fromCurrentContextPath()
+                   .path("/media/")
+                   .path("default.jpg")
+                   .toUriString();
+           user.setPhoto(defaultURL);
+       }
 
         return userService.saveUser(user);
     }

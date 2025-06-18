@@ -1,7 +1,6 @@
 package jjgg.academysystem.services;
 
 import jjgg.academysystem.entities.User;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
 

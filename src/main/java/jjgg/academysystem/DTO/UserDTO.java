@@ -21,9 +21,9 @@ public class UserDTO {
     private String bloodType;
     private String photo;
     private String documentType;
-    private Set<String> rols; // Se almacenarán los nombres de los roles
+    private Set<String> rols;
 
-    // Constructor vacío
+
     public UserDTO() {
     }
 
@@ -49,8 +49,6 @@ public class UserDTO {
             this.rols = rols.stream().map(Rol::getNameRol).collect(Collectors.toSet());
         }
     }
-
-    // Getters y Setters
 
     public Long getDocument() {
         return document;
