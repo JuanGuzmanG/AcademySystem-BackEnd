@@ -34,6 +34,7 @@ public class UserCreateDTO {
 
     private String countryBirth;
     private Long phoneNumber;
+    private String Photo;
     private String gender;
     private String bloodType;
     private String documentType;
@@ -116,6 +117,14 @@ public class UserCreateDTO {
 
     public void setPhoneNumber(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getPhoto() {
+        return Photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.Photo = photo;
     }
 
     public String getGender() {

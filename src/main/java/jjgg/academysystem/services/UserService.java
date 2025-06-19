@@ -1,18 +1,22 @@
 package jjgg.academysystem.services;
 
+import jjgg.academysystem.DTO.UserCreateDTO;
+import jjgg.academysystem.DTO.UserResponseDTO;
+import jjgg.academysystem.DTO.UserUpdateDTO;
 import jjgg.academysystem.entities.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
 
 public interface UserService {
 
-    Set<User> getallusers();
+    Set<UserResponseDTO> getallusers();
 
-    User getUser(Long id);
+    UserResponseDTO getUser(Long id);
 
-    User saveUser(User user) throws Exception;
+    UserResponseDTO saveUser(UserCreateDTO userCreateDTO) throws Exception;
 
-    User updateUser(User user) throws Exception;
+    UserResponseDTO updateUser(Long id, UserUpdateDTO userUpdateDTO, MultipartFile photoFile) throws Exception;
 
     void deleteUser(Long id);
 

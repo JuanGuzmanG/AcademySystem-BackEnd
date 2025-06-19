@@ -4,9 +4,8 @@ import jjgg.academysystem.entities.Rol;
 
 import java.time.LocalDate;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-public class UserDTO {
+public class UserResponseDTO {
     private Long document;
     private String username;
     private String firstName;
@@ -21,34 +20,7 @@ public class UserDTO {
     private String bloodType;
     private String photo;
     private String documentType;
-    private Set<String> rols;
-
-
-    public UserDTO() {
-    }
-
-    // Constructor con todos los campos (excepto password)
-    public UserDTO(Long document, String username, String firstName, String middleName, String lastName,
-                   String secondLastName, LocalDate birthDate, String email, String countryBirth, Long phoneNumber,
-                   String gender, String bloodType, String photo, String documentType, Set<Rol> rols) {
-        this.document = document;
-        this.username = username;
-        this.firstName = firstName;
-        this.middleName = middleName;
-        this.lastName = lastName;
-        this.secondLastName = secondLastName;
-        this.birthDate = birthDate;
-        this.email = email;
-        this.countryBirth = countryBirth;
-        this.phoneNumber = phoneNumber;
-        this.gender = gender;
-        this.bloodType = bloodType;
-        this.photo = photo;
-        this.documentType = documentType;
-        if (rols != null) {
-            this.rols = rols.stream().map(Rol::getNameRol).collect(Collectors.toSet());
-        }
-    }
+    private Set<Rol> rols;
 
     public Long getDocument() {
         return document;
@@ -162,11 +134,11 @@ public class UserDTO {
         this.documentType = documentType;
     }
 
-    public Set<String> getRols() {
+    public Set<Rol> getRols() {
         return rols;
     }
 
-    public void setRols(Set<String> rols) {
+    public void setRols(Set<Rol> rols) {
         this.rols = rols;
     }
 

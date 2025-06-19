@@ -2,7 +2,10 @@ package jjgg.academysystem.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jjgg.academysystem.DTO.UserResponseDTO;
+import jjgg.academysystem.DTO.UserUpdateDTO;
 import jjgg.academysystem.entities.User;
+import jjgg.academysystem.mappers.UserMapper;
 import jjgg.academysystem.services.StorageService;
 import jjgg.academysystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Map;
+import java.util.Set;
 
 
 @RestController
@@ -30,68 +34,39 @@ public class UserController {
 
     @Autowired
     private StorageService storageService;
+    @Autowired
+    private UserMapper userMapper;
 
     @GetMapping("/get_user_{id}")
-    public User getUser(@PathVariable Long id){
-        return userService.getUser(id);
+    public ResponseEntity<UserResponseDTO> getUser(@PathVariable Long id){
+        return ResponseEntity.ok(userService.getUser(id));
     }
 
     @GetMapping("all_users")
-    public ResponseEntity<?> getAllUsers(){
+    public ResponseEntity<Set<UserResponseDTO>> getAllUsers(){
         return ResponseEntity.ok(userService.getallusers());
     }
 
     @GetMapping("/userlogged")
-    public User getLoggedUser(@AuthenticationPrincipal UserDetails userDetails) {
-        return this.userService.getUserByUsername(userDetails.getUsername());
+    public ResponseEntity<UserResponseDTO> getLoggedUser(@AuthenticationPrincipal UserDetails userDetails) {
+        User user = this.userService.getUserByUsername(userDetails.getUsername());
+        return ResponseEntity.ok(userMapper.toUserResponseDTO(user));
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<?> updateUser(
+    @PutMapping("/update/{id}")
+    public ResponseEntity<UserResponseDTO> updateUser(
+            @PathVariable Long id,
             @RequestParam("user") String userJson,
-            @RequestParam(value = "file", required = false) MultipartFile multipartFile){
-        try{
-            User user = objectMapper.readValue(userJson, User.class);
-            System.out.println(user);
-            User currentUser = userService.getUser(user.getDocument());
+            @RequestParam(value = "file", required = false) MultipartFile multipartFile) throws Exception {
 
-            if(multipartFile != null && !multipartFile.isEmpty()) {
-                String oldPhotoUrl = currentUser.getPhoto();
-                if(oldPhotoUrl!=null && !oldPhotoUrl.isEmpty()) {
-                    if(!oldPhotoUrl.equals("http://localhost:8080/media/default.jpg")) {
-                        String oldmultiparFilename = oldPhotoUrl.substring(oldPhotoUrl.lastIndexOf('/')+1);
-                        storageService.delete(oldmultiparFilename);
-                    }
-                }
-                String newMultipartFilename = storageService.store(multipartFile);
-                String newPhotoUrl = ServletUriComponentsBuilder
-                        .fromCurrentContextPath()
-                        .path("/media/")
-                        .path(newMultipartFilename)
-                        .toUriString();
-                currentUser.setPhoto(newPhotoUrl);
-            }
-            currentUser.setDocumentType(user.getDocumentType());
-            currentUser.setFirstName(user.getFirstName());
-            currentUser.setMiddleName(user.getMiddleName());
-            currentUser.setLastName(user.getLastName());
-            currentUser.setSecondLastName(user.getSecondLastName());
-            currentUser.setEmail(user.getEmail());
-            currentUser.setPhoneNumber(user.getPhoneNumber());
-            currentUser.setCountryBirth(user.getCountryBirth());
-            currentUser.setBirthDate(user.getBirthDate());
-            currentUser.setGender(user.getGender());
-            currentUser.setBloodType(user.getBloodType());
-            currentUser.setRols(user.getRols());
+            UserUpdateDTO userUpdateDTO = objectMapper.readValue(userJson, UserUpdateDTO.class);
 
-            User updatedUser = userService.updateUser(currentUser);
-            System.out.println("actualizado"+ updatedUser);
-            return ResponseEntity.status(HttpStatus.CREATED).body(updatedUser);
-        } catch (JsonProcessingException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Error parsing user data: " + e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("message", "Error updating user: " + e.getMessage()));
-        }
+            // 2. Delegar TODA la lógica al servicio, pasándole los datos recibidos
+            UserResponseDTO updatedUserDto = userService.updateUser(id, userUpdateDTO, multipartFile);
+
+            // 3. Devolver la respuesta.
+            // Ya no necesitas try-catch aquí porque el GlobalExceptionHandler se encarga.
+            return ResponseEntity.ok(updatedUserDto);
     }
 
     @DeleteMapping("/delete/{id}")

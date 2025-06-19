@@ -5,8 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jjgg.academysystem.DTO.ChangePasswordDTO;
+import jjgg.academysystem.DTO.UserCreateDTO;
+import jjgg.academysystem.DTO.UserResponseDTO;
 import jjgg.academysystem.entities.User;
 import jjgg.academysystem.exceptions.UserNotFoundException;
+import jjgg.academysystem.repositories.UserRepository;
 import jjgg.academysystem.security.AuthResponse;
 import jjgg.academysystem.security.LoginRequest;
 import jjgg.academysystem.services.AuthService;
@@ -44,6 +47,8 @@ public class AuthController {
 
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> Login(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
@@ -55,11 +60,15 @@ public class AuthController {
     }
 
     @PostMapping("/new_user")
-    public User saveUser(@RequestParam("user") String userJson,
-                         @RequestParam(value = "file", required = false) MultipartFile multipartFile,
-                         HttpServletRequest request) throws Exception{
+    public ResponseEntity<UserResponseDTO> saveUser(@RequestParam("user") String userJson,
+                                                    @RequestParam(value = "file", required = false) MultipartFile multipartFile
+                                                    ) throws Exception{
 
-        User user = objectMapper.readValue(userJson, User.class);
+        // El JSON ahora corresponde a UserCreateDTO
+        UserCreateDTO userCreateDTO = objectMapper.readValue(userJson, UserCreateDTO.class);
+
+        // Llama al servicio que ahora devuelve un DTO
+        UserResponseDTO savedUser = userService.saveUser(userCreateDTO);
 
        if(multipartFile != null && !multipartFile.isEmpty()) {
            String path = storageService.store(multipartFile);
@@ -68,17 +77,24 @@ public class AuthController {
                    .path("/media/")
                    .path(path)
                    .toUriString();
-           user.setPhoto(url);
+           User userEntity = userRepository.findById(savedUser.getDocument()).get();
+           userEntity.setPhoto(url);
+           userRepository.save(userEntity);
+           savedUser.setPhoto(url);
+
        } else {
            String defaultURL = ServletUriComponentsBuilder
                    .fromCurrentContextPath()
                    .path("/media/")
                    .path("default.jpg")
                    .toUriString();
-           user.setPhoto(defaultURL);
+           User userEntity = userRepository.findById(savedUser.getDocument()).get();
+           userEntity.setPhoto(defaultURL);
+           userRepository.save(userEntity);
+           savedUser.setPhoto(defaultURL);
        }
 
-        return userService.saveUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @PostMapping("/change_password")
