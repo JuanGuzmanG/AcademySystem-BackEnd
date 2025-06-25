@@ -14,7 +14,7 @@ public interface UserService {
 
     UserResponseDTO getUser(Long id);
 
-    UserResponseDTO saveUser(UserCreateDTO userCreateDTO) throws Exception;
+    UserResponseDTO saveUser(UserCreateDTO userCreateDTO, MultipartFile multipartFile) throws Exception;
 
     UserResponseDTO updateUser(Long id, UserUpdateDTO userUpdateDTO, MultipartFile photoFile) throws Exception;
 

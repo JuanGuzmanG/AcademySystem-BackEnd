@@ -1,23 +1,18 @@
 package jjgg.academysystem.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jjgg.academysystem.DTO.UserResponseDTO;
 import jjgg.academysystem.DTO.UserUpdateDTO;
 import jjgg.academysystem.entities.User;
 import jjgg.academysystem.mappers.UserMapper;
-import jjgg.academysystem.services.StorageService;
 import jjgg.academysystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.Map;
 import java.util.Set;
 
 
@@ -32,8 +27,6 @@ public class UserController {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @Autowired
-    private StorageService storageService;
     @Autowired
     private UserMapper userMapper;
 
@@ -61,11 +54,8 @@ public class UserController {
 
             UserUpdateDTO userUpdateDTO = objectMapper.readValue(userJson, UserUpdateDTO.class);
 
-            // 2. Delegar TODA la lógica al servicio, pasándole los datos recibidos
             UserResponseDTO updatedUserDto = userService.updateUser(id, userUpdateDTO, multipartFile);
 
-            // 3. Devolver la respuesta.
-            // Ya no necesitas try-catch aquí porque el GlobalExceptionHandler se encarga.
             return ResponseEntity.ok(updatedUserDto);
     }
 

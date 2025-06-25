@@ -10,7 +10,6 @@ public class Question {
     private Long idQuestion;
 
     private String contentQuestion;
-    private String imageQuestion;
     private String option1;
     private String option2;
     private String option3;
@@ -25,10 +24,9 @@ public class Question {
 
 
     public Question(){}
-    public Question(Long idQuestion, String contentQuestion, String imageQuestion, String option1, String option2, String option3, String option4, String correctOption, Test test) {
+    public Question(Long idQuestion, String contentQuestion, String option1, String option2, String option3, String option4, String correctOption, Test test) {
         this.idQuestion = idQuestion;
         this.contentQuestion = contentQuestion;
-        this.imageQuestion = imageQuestion;
         this.option1 = option1;
         this.option2 = option2;
         this.option3 = option3;
@@ -51,14 +49,6 @@ public class Question {
 
     public void setContentQuestion(String contentQuestion) {
         this.contentQuestion = contentQuestion;
-    }
-
-    public String getImageQuestion() {
-        return imageQuestion;
-    }
-
-    public void setImageQuestion(String imageQuestion) {
-        this.imageQuestion = imageQuestion;
     }
 
     public String getOption1() {

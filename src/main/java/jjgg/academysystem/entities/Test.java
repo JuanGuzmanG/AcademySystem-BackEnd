@@ -113,4 +113,19 @@ public class Test {
     public void setResults(Set<Result> results) {
         this.results = results;
     }
+
+    @Override
+    public String toString() {
+        return "Test{" +
+                "idTest=" + idTest +
+                ", testName='" + testName + '\'' +
+                ", descriptionTest='" + descriptionTest + '\'' +
+                ", maxPoints='" + maxPoints + '\'' +
+                ", cantQuestions=" + cantQuestions +
+                ", active=" + active +
+                ", subject=" + subject +
+                ", questions=" + questions +
+                ", results=" + results +
+                '}';
+    }
 }

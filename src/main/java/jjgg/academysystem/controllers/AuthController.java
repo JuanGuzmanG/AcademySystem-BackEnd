@@ -40,15 +40,7 @@ public class AuthController {
     private UserService userService;
 
     @Autowired
-    private HttpServletRequest request;
-
-    @Autowired
-    private StorageService storageService;
-
-    @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private UserRepository userRepository;
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> Login(@Valid @RequestBody LoginRequest loginRequest) throws Exception {
@@ -64,54 +56,26 @@ public class AuthController {
                                                     @RequestParam(value = "file", required = false) MultipartFile multipartFile
                                                     ) throws Exception{
 
-        // El JSON ahora corresponde a UserCreateDTO
         UserCreateDTO userCreateDTO = objectMapper.readValue(userJson, UserCreateDTO.class);
 
-        // Llama al servicio que ahora devuelve un DTO
-        UserResponseDTO savedUser = userService.saveUser(userCreateDTO);
-
-       if(multipartFile != null && !multipartFile.isEmpty()) {
-           String path = storageService.store(multipartFile);
-           String url = ServletUriComponentsBuilder
-                   .fromCurrentContextPath()
-                   .path("/media/")
-                   .path(path)
-                   .toUriString();
-           User userEntity = userRepository.findById(savedUser.getDocument()).get();
-           userEntity.setPhoto(url);
-           userRepository.save(userEntity);
-           savedUser.setPhoto(url);
-
-       } else {
-           String defaultURL = ServletUriComponentsBuilder
-                   .fromCurrentContextPath()
-                   .path("/media/")
-                   .path("default.jpg")
-                   .toUriString();
-           User userEntity = userRepository.findById(savedUser.getDocument()).get();
-           userEntity.setPhoto(defaultURL);
-           userRepository.save(userEntity);
-           savedUser.setPhoto(defaultURL);
-       }
+        UserResponseDTO savedUser = userService.saveUser(userCreateDTO, multipartFile);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
     @PostMapping("/change_password")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDTO changePasswordDTO){
-        try{
-            System.out.println("prueba de ingreso");
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            System.out.println(auth);
-            if(auth == null || !auth.isAuthenticated() || "anonymousUser".equals(auth.getPrincipal())){
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
-            }
-            String username = auth.getName();
-            System.out.println("Username: " + username);
-            authService.changeUserPassword(username, changePasswordDTO.getCurrentPassword(), changePasswordDTO.getNewPassword());
-            return ResponseEntity.ok(Map.of("message", "Password changed successfully"));
-        } catch (Exception e){
-            return ResponseEntity.status(500).body(Map.of("message", "An error occurred while changing the password"));
-        }
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        authService.changeUserPassword(
+                username,
+                changePasswordDTO.getCurrentPassword(),
+                changePasswordDTO.getNewPassword()
+        );
+
+        return ResponseEntity.ok(Map.of("message", "Password changed successfully"));
+
     }
 }

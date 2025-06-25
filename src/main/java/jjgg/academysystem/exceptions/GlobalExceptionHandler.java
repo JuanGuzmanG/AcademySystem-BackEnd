@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends RuntimeException {
@@ -29,13 +31,23 @@ public class GlobalExceptionHandler extends RuntimeException {
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
 
-    // Un manejador genérico para cualquier otra excepción no controlada
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidPasswordException(
+            InvalidPasswordException ex
+    ) {
+        Map<String, String> errorDetails = new HashMap<>();
+        errorDetails.put("error", "Invalid Credentials");
+        errorDetails.put("message", ex.getMessage());
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorDetailsDTO> handleGlobalException(Exception ex, WebRequest request) {
+    public ResponseEntity<ErrorDetailsDTO> handleGlobalException(Exception ex) {
         ErrorDetailsDTO errorDetails = new ErrorDetailsDTO(
                 LocalDateTime.now(),
                 "An internal error occurred",
-                ex.getMessage()); // En producción, podrías querer ocultar el mensaje de la excepción
+                ex.getMessage());
         return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

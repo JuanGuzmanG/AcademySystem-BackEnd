@@ -1,25 +1,22 @@
 package jjgg.academysystem.services.Implementation;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jjgg.academysystem.DTO.UserCreateDTO;
 import jjgg.academysystem.DTO.UserResponseDTO;
 import jjgg.academysystem.DTO.UserUpdateDTO;
-import jjgg.academysystem.entities.Rol;
 import jjgg.academysystem.entities.User;
-import jjgg.academysystem.exceptions.ResourceAlreadyExistsException;
 import jjgg.academysystem.exceptions.ResourceNotFoundException;
+import jjgg.academysystem.exceptions.UserFoundException;
 import jjgg.academysystem.mappers.UserMapper;
-import jjgg.academysystem.repositories.RolRepository;
 import jjgg.academysystem.repositories.UserRepository;
 import jjgg.academysystem.services.FileSystemStorageService;
 import jjgg.academysystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,15 +27,11 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private RolRepository rolRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private FileSystemStorageService fileStorageService;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Override
     public Set<UserResponseDTO> getallusers() {
@@ -57,26 +50,34 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponseDTO saveUser(UserCreateDTO userCreateDTO){
+    public UserResponseDTO saveUser(UserCreateDTO userCreateDTO, MultipartFile multipartFile) throws UserFoundException {
 
-        if(userRepository.findById(userCreateDTO.getDocument()).isPresent()){
-            throw new ResourceAlreadyExistsException("User","document",userCreateDTO.getDocument());
+        User user = objectMapper.convertValue(userCreateDTO, User.class);
+        User savedUserEntity = userRepository.save(user);
+        UserResponseDTO savedUserResponse = objectMapper.convertValue(savedUserEntity, UserResponseDTO.class);
+
+        String photoUrl;
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            String path = fileStorageService.store(multipartFile);
+            photoUrl = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .path("/media/")
+                    .path(path)
+                    .toUriString();
+        } else {
+            photoUrl = ServletUriComponentsBuilder
+                    .fromCurrentContextPath()
+                    .path("/media/")
+                    .path("default.jpg")
+                    .toUriString();
         }
 
-        User user = userMapper.toUser(userCreateDTO);
-        //password encryption
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setUsername(String.valueOf(user.getDocument()));
+        savedUserEntity.setPhoto(photoUrl);
+        userRepository.save(savedUserEntity);
 
-        //role assignment
-        Set<Rol> roles = new HashSet<>();
-        Rol defaultRol = rolRepository.findById(2L).orElseThrow(() ->
-                new RuntimeException("default role (user) not found"));
-        roles.add(defaultRol);
-        user.setRols(roles);
+        savedUserResponse.setPhoto(photoUrl);
 
-        User savedUser = userRepository.save(user);
-        return userMapper.toUserResponseDTO(savedUser);
+        return savedUserResponse;
     }
 
     @Override
@@ -94,23 +95,21 @@ public class UserServiceImpl implements UserService {
                     String oldPhotoFilename = oldPhotoUrl.substring(oldPhotoUrl.lastIndexOf('/') + 1);
                     fileStorageService.delete(oldPhotoFilename);
                 } catch (Exception e) {
-                    // Opcional: registrar que no se pudo borrar el archivo antiguo, pero no detener el proceso
                     System.err.println("Could not delete old photo file: " + e.getMessage());
                 }
             }
 
             String newPhotoFilename = fileStorageService.store(photoFile);
 
-            // Construir la nueva URL
             String newPhotoUrl = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
                     .path("/media/")
                     .path(newPhotoFilename)
                     .toUriString();
 
-            // Actualizar la URL de la foto en la entidad
             existingUser.setPhoto(newPhotoUrl);
         }
+
         User updatedUser = userRepository.save(existingUser);
 
         return userMapper.toUserResponseDTO(updatedUser);

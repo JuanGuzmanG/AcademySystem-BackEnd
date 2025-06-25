@@ -1,5 +1,3 @@
-#construir el jar
-#dividir en capas
 FROM maven:3.9-eclipse-temurin-21 AS build
 
 WORKDIR /app
@@ -12,8 +10,6 @@ RUN mvn package -DskipTests
 
 RUN ls -la /app/target
 
-
-#construccion de imagen final
 FROM openjdk:21-jdk-slim
 
 WORKDIR /app

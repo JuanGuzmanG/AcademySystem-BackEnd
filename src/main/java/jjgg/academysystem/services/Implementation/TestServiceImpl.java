@@ -24,7 +24,8 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public Test update(Test test) {
-        return testRepository.save(test);
+        Test testUpdate = testRepository.findById(test.getIdTest()).orElseThrow(() -> new RuntimeException("Test not found"));
+        return testRepository.save(testUpdate);
     }
 
     @Override
@@ -54,8 +55,6 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public void delete(Long id) {
-        Test test = new Test();
-        test.setIdTest(id);
-        testRepository.delete(test);
+        testRepository.deleteById(id);
     }
 }
