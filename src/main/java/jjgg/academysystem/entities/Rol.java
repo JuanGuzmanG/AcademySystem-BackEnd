@@ -10,8 +10,8 @@ import java.util.Set;
 @Table(name = "rol")
 public class Rol {
     @Id
-    private Long idRol;
-    private String nameRol;
+    private Long rolId;
+    private String rolName;
 
     @ManyToMany(mappedBy = "rols")
     @JsonIgnore
@@ -20,34 +20,34 @@ public class Rol {
     public Rol() {
     }
 
-    public Rol(Long idRol, String nameRol, Set<User> users) {
-        this.idRol = idRol;
-        this.nameRol = nameRol;
+    public Rol(Long rolId, String rolName, Set<User> users) {
+        this.rolId = rolId;
+        this.rolName = rolName;
         this.users = users;
     }
 
     @Override
     public String toString() {
         return "Rol{" +
-                "idRol=" + idRol +
-                ", nameRol='" + nameRol + '\'' +
+                "idRol=" + rolId +
+                ", nameRol='" + rolName + '\'' +
                 '}';
     }
 
-    public Long getIdRol() {
-        return idRol;
+    public Long getRolId() {
+        return rolId;
     }
 
-    public void setIdRol(Long idRol) {
-        this.idRol = idRol;
+    public void setRolId(Long idRol) {
+        this.rolId = idRol;
     }
 
-    public String getNameRol() {
-        return nameRol;
+    public String getRolName() {
+        return rolName;
     }
 
-    public void setNameRol(String nameRol) {
-        this.nameRol = nameRol;
+    public void setRolName(String nameRol) {
+        this.rolName = nameRol;
     }
 
     public Set<User> getUsers() {

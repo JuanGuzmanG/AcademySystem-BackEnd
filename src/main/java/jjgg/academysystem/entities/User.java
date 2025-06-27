@@ -88,7 +88,7 @@ public class User implements UserDetails {
                 ", gender=" + gender +
                 ", bloodType=" + bloodType +
                 ", photo='" + photo + '\'' +
-                ", roles=" + rols.stream().map(Rol::getNameRol).toList() +
+                ", roles=" + rols.stream().map(Rol::getRolName).toList() +
                 '}';
     }
 
@@ -103,7 +103,7 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return rols.stream().map(rol ->
-                new SimpleGrantedAuthority(rol.getNameRol().toUpperCase()))
+                new SimpleGrantedAuthority(rol.getRolName().toUpperCase()))
                 .collect(Collectors.toList());
     }
 

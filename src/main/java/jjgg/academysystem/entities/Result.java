@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class Result {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idResult;
+    private Long resultId;
 
     private int score;
     private LocalDateTime date;
@@ -25,12 +25,12 @@ public class Result {
     public Result() {
     }
 
-    public Long getIdResult() {
-        return idResult;
+    public Long getResultId() {
+        return resultId;
     }
 
-    public void setIdResult(Long idResult) {
-        this.idResult = idResult;
+    public void setResultId(Long idResult) {
+        this.resultId = idResult;
     }
 
     public int getScore() {

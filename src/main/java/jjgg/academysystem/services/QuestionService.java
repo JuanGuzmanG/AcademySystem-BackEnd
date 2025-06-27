@@ -1,6 +1,7 @@
 package jjgg.academysystem.services;
 
 import jjgg.academysystem.entities.Question;
+import jjgg.academysystem.entities.Test;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -13,6 +14,8 @@ public interface QuestionService {
     Question update(Question question);
 
     Set<Question> getAll();
+
+    Set<Question> getByTest(Test test);
 
     Question getQuestionById(Long id);
 

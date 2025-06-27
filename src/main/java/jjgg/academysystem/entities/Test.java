@@ -11,10 +11,10 @@ import java.util.Set;
 public class Test {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idTest;
+    private Long testId;
 
     private String testName;
-    private String descriptionTest;
+    private String testDescription;
     private String maxPoints;
     private int cantQuestions;
     private boolean active;
@@ -31,10 +31,10 @@ public class Test {
     private Set<Result> results = new HashSet<>();
 
     public Test(){}
-    public Test(Long idTest, String testName, String descriptionTest, String maxPoints, int cantQuestions, boolean active, Subject subject, Set<Question> questions) {
-        this.idTest = idTest;
+    public Test(Long testId, String testName, String testDescription, String maxPoints, int cantQuestions, boolean active, Subject subject, Set<Question> questions) {
+        this.testId = testId;
         this.testName = testName;
-        this.descriptionTest = descriptionTest;
+        this.testDescription = testDescription;
         this.maxPoints = maxPoints;
         this.cantQuestions = cantQuestions;
         this.active = active;
@@ -42,12 +42,12 @@ public class Test {
         this.questions = questions;
     }
 
-    public Long getIdTest() {
-        return idTest;
+    public Long getTestId() {
+        return testId;
     }
 
-    public void setIdTest(Long idTest) {
-        this.idTest = idTest;
+    public void setTestId(Long idTest) {
+        this.testId = idTest;
     }
 
     public String getTestName() {
@@ -58,12 +58,12 @@ public class Test {
         this.testName = nameTest;
     }
 
-    public String getDescriptionTest() {
-        return descriptionTest;
+    public String getTestDescription() {
+        return testDescription;
     }
 
-    public void setDescriptionTest(String descriptionTest) {
-        this.descriptionTest = descriptionTest;
+    public void setTestDescription(String descriptionTest) {
+        this.testDescription = descriptionTest;
     }
 
     public String getMaxPoints() {
@@ -117,9 +117,9 @@ public class Test {
     @Override
     public String toString() {
         return "Test{" +
-                "idTest=" + idTest +
+                "idTest=" + testId +
                 ", testName='" + testName + '\'' +
-                ", descriptionTest='" + descriptionTest + '\'' +
+                ", descriptionTest='" + testDescription + '\'' +
                 ", maxPoints='" + maxPoints + '\'' +
                 ", cantQuestions=" + cantQuestions +
                 ", active=" + active +

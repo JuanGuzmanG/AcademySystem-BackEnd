@@ -4,19 +4,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jjgg.academysystem.DTO.UserCreateDTO;
 import jjgg.academysystem.DTO.UserResponseDTO;
 import jjgg.academysystem.DTO.UserUpdateDTO;
+import jjgg.academysystem.entities.Rol;
 import jjgg.academysystem.entities.User;
 import jjgg.academysystem.exceptions.ResourceNotFoundException;
 import jjgg.academysystem.exceptions.UserFoundException;
 import jjgg.academysystem.mappers.UserMapper;
+import jjgg.academysystem.repositories.RolRepository;
 import jjgg.academysystem.repositories.UserRepository;
 import jjgg.academysystem.services.FileSystemStorageService;
 import jjgg.academysystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -32,6 +36,10 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RolRepository rolRepository;
 
     @Override
     public Set<UserResponseDTO> getallusers() {
@@ -72,11 +80,18 @@ public class UserServiceImpl implements UserService {
                     .toUriString();
         }
 
+        //role assignment
+        Set<Rol> roles = new HashSet<>();
+        Rol defaultRol = rolRepository.findById(2L).orElseThrow(() ->
+                new RuntimeException("default role (user) not found"));
+        roles.add(defaultRol);
+        savedUserEntity.setRols(roles);
+
         savedUserEntity.setPhoto(photoUrl);
+        savedUserEntity.setPassword(passwordEncoder.encode(savedUserEntity.getPassword()));
+        savedUserEntity.setUsername(user.getDocument().toString());
         userRepository.save(savedUserEntity);
-
         savedUserResponse.setPhoto(photoUrl);
-
         return savedUserResponse;
     }
 
@@ -109,6 +124,8 @@ public class UserServiceImpl implements UserService {
 
             existingUser.setPhoto(newPhotoUrl);
         }
+
+
 
         User updatedUser = userRepository.save(existingUser);
 

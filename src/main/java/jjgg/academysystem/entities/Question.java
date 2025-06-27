@@ -7,9 +7,9 @@ import jakarta.persistence.*;
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idQuestion;
+    private Long questionId;
 
-    private String contentQuestion;
+    private String questionContent;
     private String option1;
     private String option2;
     private String option3;
@@ -24,9 +24,9 @@ public class Question {
 
 
     public Question(){}
-    public Question(Long idQuestion, String contentQuestion, String option1, String option2, String option3, String option4, String correctOption, Test test) {
-        this.idQuestion = idQuestion;
-        this.contentQuestion = contentQuestion;
+    public Question(Long questionId, String questionContent, String option1, String option2, String option3, String option4, String correctOption, Test test) {
+        this.questionId = questionId;
+        this.questionContent = questionContent;
         this.option1 = option1;
         this.option2 = option2;
         this.option3 = option3;
@@ -35,20 +35,20 @@ public class Question {
         this.test = test;
     }
 
-    public Long getIdQuestion() {
-        return idQuestion;
+    public Long getQuestionId() {
+        return questionId;
     }
 
-    public void setIdQuestion(Long idQuestion) {
-        this.idQuestion = idQuestion;
+    public void setQuestionId(Long idQuestion) {
+        this.questionId = idQuestion;
     }
 
-    public String getContentQuestion() {
-        return contentQuestion;
+    public String getQuestionContent() {
+        return questionContent;
     }
 
-    public void setContentQuestion(String contentQuestion) {
-        this.contentQuestion = contentQuestion;
+    public void setQuestionContent(String contentQuestion) {
+        this.questionContent = contentQuestion;
     }
 
     public String getOption1() {

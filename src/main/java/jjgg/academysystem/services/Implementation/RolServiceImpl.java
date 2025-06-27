@@ -21,18 +21,8 @@ public class RolServiceImpl implements RolService {
     }
 
     @Override
-    public Rol findByNameRol(String nameRol) {
-        return rolRepository.findByNameRol(nameRol);
-    }
-
-    @Override
     public Rol save(Rol rol) {
         return rolRepository.save(rol);
-    }
-
-    @Override
-    public void deleteById(Long idRol) {
-        rolRepository.deleteById(idRol);
     }
 
     @Override

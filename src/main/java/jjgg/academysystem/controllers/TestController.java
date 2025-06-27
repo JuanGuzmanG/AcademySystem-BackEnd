@@ -17,9 +17,9 @@ public class TestController {
     @Autowired
     private TestService testService;
 
-    @GetMapping("/{idTest}")
-    public ResponseEntity<Test> getTest(@PathVariable Long idTest) {
-        return ResponseEntity.ok(testService.getById(idTest));
+    @GetMapping("/{testId}")
+    public ResponseEntity<Test> getTest(@PathVariable Long testId) {
+        return ResponseEntity.ok(testService.getById(testId));
     }
 
     @GetMapping("/testlist")
@@ -27,10 +27,10 @@ public class TestController {
         return ResponseEntity.ok(testService.findAll());
     }
 
-    @GetMapping("/subject/{idSubject}")
-        public List<Test> getAllTestsBySubject(@PathVariable Long idSubject) {
+    @GetMapping("/subject/{subjectId}")
+        public List<Test> getAllTestsBySubject(@PathVariable Long subjectId) {
             Subject subject = new Subject();
-            subject.setIdSubject(idSubject);
+            subject.setSubjectId(subjectId);
             return testService.getAllTestsBySubject(subject);
         }
 
@@ -42,7 +42,7 @@ public class TestController {
     @GetMapping("/active/{subjectId}")
         public List<Test> getAllActiveTestsBySubject(@PathVariable Long subjectId) {
             Subject subject = new Subject();
-            subject.setIdSubject(subjectId);
+            subject.setSubjectId(subjectId);
             return testService.getAllTestsBySubjectAndActive(subject);
         }
 
@@ -52,12 +52,12 @@ public class TestController {
         }
 
     @PutMapping("/update")
-        public ResponseEntity<Test> updateQuestion(@RequestBody Test test) {
+        public ResponseEntity<Test> updateTest(@RequestBody Test test) {
             return ResponseEntity.ok(testService.update(test));
         }
 
-    @DeleteMapping("/delete/{idTest}")
-        public void deleteTest(@PathVariable Long idTest) {
-            testService.delete(idTest);
+    @DeleteMapping("/delete/{testId}")
+        public void deleteTest(@PathVariable Long testId) {
+            testService.delete(testId);
         }
 }

@@ -24,7 +24,13 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public Test update(Test test) {
-        Test testUpdate = testRepository.findById(test.getIdTest()).orElseThrow(() -> new RuntimeException("Test not found"));
+        Test testUpdate = testRepository.findById(test.getTestId()).orElseThrow(() -> new RuntimeException("Test not found"));
+        testUpdate.setTestName(test.getTestName());
+        testUpdate.setTestDescription(test.getTestDescription());
+        testUpdate.setMaxPoints(test.getMaxPoints());
+        testUpdate.setCantQuestions(test.getCantQuestions());
+        testUpdate.setActive(test.isActive());
+        testUpdate.setSubject(test.getSubject());
         return testRepository.save(testUpdate);
     }
 

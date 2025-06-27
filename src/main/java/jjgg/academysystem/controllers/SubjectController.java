@@ -20,12 +20,12 @@ public class SubjectController {
         return ResponseEntity.ok(createdSubject);
     }
 
-    @GetMapping("/{idSubject}")
-    public Subject getById(@PathVariable Long idSubject) {
+    @GetMapping("/{subjectId}")
+    public Subject getById(@PathVariable Long subjectId) {
         try{
-            return subjectService.getSubjectById(idSubject);
+            return subjectService.getSubjectById(subjectId);
         } catch (Exception e){
-            System.out.println("Error: no subject found with id " + idSubject);
+            System.out.println("Error: no subject found with id " + subjectId);
             return null;
         }
     }
@@ -40,9 +40,9 @@ public class SubjectController {
         return subjectService.update(subject);
     }
 
-    @DeleteMapping("/delete/{idSubject}")
-    public void deleteSubject(@PathVariable Long idSubject) {
-        subjectService.delete(idSubject);
+    @DeleteMapping("/delete/{subjectId}")
+    public void deleteSubject(@PathVariable Long subjectId) {
+        subjectService.delete(subjectId);
     }
 
 }

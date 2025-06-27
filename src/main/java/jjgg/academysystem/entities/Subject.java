@@ -11,43 +11,43 @@ import java.util.Set;
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idSubject;
+    private Long subjectId;
 
-    private String nameSubject;
-    private String descriptionSubject;
+    private String subjectName;
+    private String subjectDescription;
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL,orphanRemoval = true)
     @JsonIgnore
     private Set<Test> tests = new LinkedHashSet<>();
 
     public Subject() {}
-    public Subject(String nameSubject, String descriptionSubject) {
-        this.nameSubject = nameSubject;
-        this.descriptionSubject = descriptionSubject;
+    public Subject(String subjectName, String subjectDescription) {
+        this.subjectName = subjectName;
+        this.subjectDescription = subjectDescription;
     }
 
-    public Long getIdSubject() {
-        return idSubject;
+    public Long getSubjectId() {
+        return subjectId;
     }
 
-    public void setIdSubject(Long idSubject) {
-        this.idSubject = idSubject;
+    public void setSubjectId(Long idSubject) {
+        this.subjectId = idSubject;
     }
 
-    public String getNameSubject() {
-        return nameSubject;
+    public String getSubjectName() {
+        return subjectName;
     }
 
-    public void setNameSubject(String nameSubject) {
-        this.nameSubject = nameSubject;
+    public void setSubjectName(String nameSubject) {
+        this.subjectName = nameSubject;
     }
 
-    public String getDescriptionSubject() {
-        return descriptionSubject;
+    public String getSubjectDescription() {
+        return subjectDescription;
     }
 
-    public void setDescriptionSubject(String descriptionSubject) {
-        this.descriptionSubject = descriptionSubject;
+    public void setSubjectDescription(String descriptionSubject) {
+        this.subjectDescription = descriptionSubject;
     }
 
     public Set<Test> getTests() {

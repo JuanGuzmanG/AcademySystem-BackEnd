@@ -20,9 +20,9 @@ public class QuestionController {
     @Autowired
     private TestService testService;
 
-    @GetMapping("/{idQuestion}")
-    public Question getById(@PathVariable Long idQuestion) {
-        return questionService.getQuestionById(idQuestion);
+    @GetMapping("/{questionId}")
+    public Question getById(@PathVariable Long questionId) {
+        return questionService.getQuestionById(questionId);
     }
 
     @GetMapping("/questionslist")
@@ -30,9 +30,9 @@ public class QuestionController {
             return ResponseEntity.ok(questionService.getAll());
         }
 
-    @GetMapping("/test/{idTest}")
-        public ResponseEntity<?> getQuestionsByTest(@PathVariable Long idTest) {
-            Test test = testService.getById(idTest);
+    @GetMapping("/test/{testId}")
+        public ResponseEntity<?> getQuestionsByTest(@PathVariable Long testId) {
+            Test test = testService.getById(testId);
             Set<Question> questions = test.getQuestions();
 
             List tests = new ArrayList<>(questions);
@@ -55,7 +55,7 @@ public class QuestionController {
             Integer correctAnswers = 0;
             Integer attempts = 0;
             for(Question q : questions){
-                Question question = questionService.ListQuestion(q.getIdQuestion());
+                Question question = questionService.ListQuestion(q.getQuestionId());
                 if(question.getCorrectOption().equals(q.getSelectedAnswer())){
                     correctAnswers++;
                     double points = Double.parseDouble(questions.get(0).getTest().getMaxPoints())/questions.size();
@@ -78,8 +78,8 @@ public class QuestionController {
             return ResponseEntity.ok(updatedQuestion);
         }
 
-    @DeleteMapping("/delete/{idQuestion}")
-        public void deleteQuestion(@PathVariable Long idQuestion) {
-            questionService.delete(idQuestion);
+    @DeleteMapping("/delete/{questionId}")
+        public void deleteQuestion(@PathVariable Long questionId) {
+            questionService.delete(questionId);
         }
 }

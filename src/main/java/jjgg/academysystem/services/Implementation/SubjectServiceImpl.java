@@ -13,32 +13,33 @@ import java.util.Set;
 public class SubjectServiceImpl implements SubjectService {
 
     @Autowired
-    private SubjectReposiroty subjectReposiroty;
+    private SubjectReposiroty subjectRepository;
 
     @Override
     public Subject save(Subject subject) {
-        return subjectReposiroty.save(subject);
+        return subjectRepository.save(subject);
     }
 
     @Override
     public Subject update(Subject subject) {
-        return subjectReposiroty.save(subject);
+        Subject subjectUpdate = subjectRepository.findById(subject.getSubjectId()).get();
+        subjectUpdate.setSubjectName(subject.getSubjectName());
+        subjectUpdate.setSubjectDescription(subject.getSubjectDescription());
+        return subjectRepository.save(subjectUpdate);
     }
 
     @Override
     public Set<Subject> getAll() {
-        return new HashSet<>(subjectReposiroty.findAll());
+        return new HashSet<>(subjectRepository.findAll());
     }
 
     @Override
     public Subject getSubjectById(Long id) {
-        return subjectReposiroty.findById(id).get();
+        return subjectRepository.findById(id).get();
     }
 
     @Override
     public void delete(Long id) {
-        Subject subject = new Subject();
-        subject.setIdSubject(id);
-        subjectReposiroty.delete(subject);
+        subjectRepository.deleteById(id);
     }
 }
