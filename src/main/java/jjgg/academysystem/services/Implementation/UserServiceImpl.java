@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO updateUser(Long id, UserUpdateDTO userUpdateDTO, MultipartFile photoFile) throws Exception {
+    public UserResponseDTO updateUser(Long id, UserUpdateDTO userUpdateDTO, MultipartFile photoFile) {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User","id",id));
 
@@ -104,7 +104,6 @@ public class UserServiceImpl implements UserService {
 
         if(photoFile != null && !photoFile.isEmpty()){
             String oldPhotoUrl = existingUser.getPhoto();
-
             if (oldPhotoUrl != null && !oldPhotoUrl.isEmpty() && !isDefaultPhoto(oldPhotoUrl)) {
                 try {
                     String oldPhotoFilename = oldPhotoUrl.substring(oldPhotoUrl.lastIndexOf('/') + 1);
@@ -124,9 +123,7 @@ public class UserServiceImpl implements UserService {
 
             existingUser.setPhoto(newPhotoUrl);
         }
-
-
-
+        existingUser.setUsername(userUpdateDTO.getUsername());
         User updatedUser = userRepository.save(existingUser);
 
         return userMapper.toUserResponseDTO(updatedUser);

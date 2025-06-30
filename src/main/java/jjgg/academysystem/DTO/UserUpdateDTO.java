@@ -6,6 +6,7 @@
     import java.util.Set;
 
     public class UserUpdateDTO {
+        private String username;
         private String firstName;
         private String middleName;
         private String lastName;
@@ -18,6 +19,14 @@
         private String bloodType;
         private String documentType;
         private Set<Rol> rols;
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
 
         public String getFirstName() {
             return firstName;
