@@ -11,15 +11,15 @@ import jjgg.academysystem.exceptions.UserFoundException;
 import jjgg.academysystem.mappers.UserMapper;
 import jjgg.academysystem.repositories.RolRepository;
 import jjgg.academysystem.repositories.UserRepository;
-import jjgg.academysystem.services.FileSystemStorageService;
+import jjgg.academysystem.services.StorageService;
 import jjgg.academysystem.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -29,9 +29,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private FileSystemStorageService fileStorageService;
     @Autowired
     private UserMapper userMapper;
     @Autowired
@@ -40,6 +37,8 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private RolRepository rolRepository;
+    @Autowired
+    private StorageService storageService;
 
     @Override
     public Set<UserResponseDTO> getallusers() {
@@ -56,31 +55,22 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserResponseDTO(user);
     }
 
-    @Override
     @Transactional
     public UserResponseDTO saveUser(UserCreateDTO userCreateDTO, MultipartFile multipartFile) throws UserFoundException {
-
         User user = objectMapper.convertValue(userCreateDTO, User.class);
         User savedUserEntity = userRepository.save(user);
-        UserResponseDTO savedUserResponse = objectMapper.convertValue(savedUserEntity, UserResponseDTO.class);
 
         String photoUrl;
         if (multipartFile != null && !multipartFile.isEmpty()) {
-            String path = fileStorageService.store(multipartFile);
-            photoUrl = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-                    .path("/media/")
-                    .path(path)
-                    .toUriString();
+            // La lógica de construcción de URL se va. El método store() ya devuelve la URL completa.
+            photoUrl = storageService.store(multipartFile);
         } else {
-            photoUrl = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-                    .path("/media/")
-                    .path("default.jpg")
-                    .toUriString();
+            // Opcional: puedes tener una imagen por defecto subida a tu contenedor de Azure
+            // y poner aquí su URL fija. Por ahora, lo dejamos como null o vacío.
+            photoUrl = "https://academysystemstorage.blob.core.windows.net/profile-pictures/default.jpg"; // ¡Ejemplo! Cambia esto por tu URL real.
         }
 
-        //role assignment
+        // Asignación de rol
         Set<Rol> roles = new HashSet<>();
         Rol defaultRol = rolRepository.findById(2L).orElseThrow(() ->
                 new RuntimeException("default role (user) not found"));
@@ -90,40 +80,38 @@ public class UserServiceImpl implements UserService {
         savedUserEntity.setPhoto(photoUrl);
         savedUserEntity.setPassword(passwordEncoder.encode(savedUserEntity.getPassword()));
         savedUserEntity.setUsername(user.getDocument().toString());
+
         userRepository.save(savedUserEntity);
-        savedUserResponse.setPhoto(photoUrl);
-        return savedUserResponse;
+
+        // Mapeamos a DTO al final para tener todos los datos actualizados
+        return userMapper.toUserResponseDTO(savedUserEntity);
     }
 
     @Override
     public UserResponseDTO updateUser(Long id, UserUpdateDTO userUpdateDTO, MultipartFile photoFile) {
         User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User","id",id));
+                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 
         userMapper.updateUserFromDto(userUpdateDTO, existingUser);
 
-        if(photoFile != null && !photoFile.isEmpty()){
+        if (photoFile != null && !photoFile.isEmpty()) {
             String oldPhotoUrl = existingUser.getPhoto();
-            if (oldPhotoUrl != null && !oldPhotoUrl.isEmpty() && !isDefaultPhoto(oldPhotoUrl)) {
+
+            // Borrar la foto antigua si no es la de por defecto
+            if (oldPhotoUrl != null && !oldPhotoUrl.isBlank() && !isDefaultPhoto(oldPhotoUrl)) {
                 try {
-                    String oldPhotoFilename = oldPhotoUrl.substring(oldPhotoUrl.lastIndexOf('/') + 1);
-                    fileStorageService.delete(oldPhotoFilename);
-                } catch (Exception e) {
+                    storageService.delete(oldPhotoUrl);
+                } catch (IOException e) {
                     System.err.println("Could not delete old photo file: " + e.getMessage());
                 }
             }
 
-            String newPhotoFilename = fileStorageService.store(photoFile);
-
-            String newPhotoUrl = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-                    .path("/media/")
-                    .path(newPhotoFilename)
-                    .toUriString();
-
+            // Subir la nueva foto y obtener su URL
+            String newPhotoUrl = storageService.store(photoFile);
             existingUser.setPhoto(newPhotoUrl);
         }
-        existingUser.setUsername(userUpdateDTO.getUsername());
+
+        existingUser.setUsername(userUpdateDTO.getUsername()); // Mantienes esta lógica
         User updatedUser = userRepository.save(existingUser);
 
         return userMapper.toUserResponseDTO(updatedUser);
@@ -143,7 +131,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private boolean isDefaultPhoto(String photoUrl) {
-        return photoUrl.endsWith("/media/default.jpg");
+        return photoUrl != null && photoUrl.endsWith("/default.jpg");
     }
 }
 
