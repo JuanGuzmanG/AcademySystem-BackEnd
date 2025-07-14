@@ -46,6 +46,3 @@ El proyecto utiliza una serie de dependencias clave para proporcionar funcionali
 - Mapeo eficiente de entidades y DTOs con MapStruct.
 - Pruebas unitarias y de integración con JUnit y Mockito.
 - Posibilidad de almacenar archivos en Azure Blob Storage.
-
-## Ejemplo de Estructura de Carpetas
-
